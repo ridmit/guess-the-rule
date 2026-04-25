@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,8 +8,10 @@ public class LevelManager : MonoBehaviour
 
     [SerializeField] private Transform player;
     [SerializeField] private Transform startPoint;
+    [SerializeField] private float nextLevelDelay = 0.15f;
 
     private bool isLevelFinished;
+    private bool isRestarting;
 
     private void Awake()
     {
@@ -31,13 +34,30 @@ public class LevelManager : MonoBehaviour
 
     public void FinishLevel()
     {
-        if (isLevelFinished)
+        if (isLevelFinished || isRestarting)
         {
             return;
         }
 
         isLevelFinished = true;
-        LoadNextLevel();
+        StartCoroutine(LoadNextLevelWithDelay());
+    }
+
+    public void KillPlayer()
+    {
+        if (isRestarting || isLevelFinished)
+        {
+            return;
+        }
+
+        isRestarting = true;
+
+        if (player != null)
+        {
+            player.gameObject.SetActive(false);
+        }
+
+        RestartLevel();
     }
 
     public void RestartLevel()
@@ -53,6 +73,12 @@ public class LevelManager : MonoBehaviour
         }
 
         player.position = startPoint.position;
+    }
+
+    private IEnumerator LoadNextLevelWithDelay()
+    {
+        yield return new WaitForSeconds(nextLevelDelay);
+        LoadNextLevel();
     }
 
     private void LoadNextLevel()
