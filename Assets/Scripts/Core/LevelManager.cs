@@ -8,6 +8,7 @@ public class LevelManager : MonoBehaviour
 
     [SerializeField] private Transform player;
     [SerializeField] private Transform startPoint;
+    [SerializeField] private LevelHintsConfig levelHintsConfig;
     [SerializeField] private float nextLevelDelay = 0.15f;
 
     private bool isLevelFinished;
@@ -22,6 +23,11 @@ public class LevelManager : MonoBehaviour
         }
 
         Instance = this;
+
+        if (levelHintsConfig == null)
+        {
+            levelHintsConfig = Resources.Load<LevelHintsConfig>("LevelHintsConfig");
+        }
     }
 
     private void Update()
@@ -51,12 +57,6 @@ public class LevelManager : MonoBehaviour
         }
 
         isRestarting = true;
-
-        if (player != null)
-        {
-            player.gameObject.SetActive(false);
-        }
-
         RestartLevel();
     }
 
@@ -73,6 +73,35 @@ public class LevelManager : MonoBehaviour
         }
 
         player.position = startPoint.position;
+    }
+
+    public string GetHintText()
+    {
+        int levelNumber = GetCurrentLevelNumber();
+
+        if (levelHintsConfig == null)
+        {
+            return "Конфиг подсказок не найден.";
+        }
+
+        return levelHintsConfig.GetHint(levelNumber);
+    }
+
+    public string GetLevelTitle()
+    {
+        int levelNumber = GetCurrentLevelNumber();
+
+        if (levelHintsConfig == null)
+        {
+            return "Уровень " + levelNumber;
+        }
+
+        return levelHintsConfig.LevelLabelText + " " + levelNumber;
+    }
+
+    private int GetCurrentLevelNumber()
+    {
+        return SceneManager.GetActiveScene().buildIndex + 1;
     }
 
     private IEnumerator LoadNextLevelWithDelay()

@@ -2623,6 +2623,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 126912723}
   startPoint: {fileID: 2034481295}
+  levelHintsConfig: {fileID: 0}
   nextLevelDelay: 0.05
 --- !u!4 &1133215995
 Transform:
