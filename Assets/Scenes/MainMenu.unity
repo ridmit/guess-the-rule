@@ -374,7 +374,7 @@ GameObject:
   - component: {fileID: 108565207}
   - component: {fileID: 108565206}
   m_Layer: 5
-  m_Name: PauseTitleText
+  m_Name: GameTitleText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -997,6 +997,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd37185306256024893c65f4f875ef2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playButton: {fileID: 2010191262}
   exitButton: {fileID: 2102510814}
 --- !u!4 &1767826466
 Transform:
