@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PauseMenuController : MonoBehaviour
@@ -123,6 +124,7 @@ public class PauseMenuController : MonoBehaviour
 
     private void GoToMenu()
     {
-        Debug.Log("Menu button clicked. Main menu is not implemented yet.");
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MainMenu");
     }
 }

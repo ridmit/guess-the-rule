@@ -101,7 +101,7 @@ public class LevelManager : MonoBehaviour
 
     private int GetCurrentLevelNumber()
     {
-        return SceneManager.GetActiveScene().buildIndex + 1;
+        return SceneManager.GetActiveScene().buildIndex;
     }
 
     private IEnumerator LoadNextLevelWithDelay()
