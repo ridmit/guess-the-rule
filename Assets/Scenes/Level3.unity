@@ -804,6 +804,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelUI
       objectReference: {fileID: 0}
+    - target: {fileID: 7822906759622082807, guid: b350435edbd865a47bb12b681ec0d299, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8113540183746972808, guid: b350435edbd865a47bb12b681ec0d299, type: 3}
       propertyPath: gameplayRoot
       value: 
@@ -812,7 +816,7 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3351623304881326905, guid: b350435edbd865a47bb12b681ec0d299, type: 3}
-      insertIndex: -1
+      insertIndex: 4
       addedObject: {fileID: 49081805}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b350435edbd865a47bb12b681ec0d299, type: 3}
@@ -1192,7 +1196,7 @@ Transform:
   m_GameObject: {fileID: 728460841}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.736, y: -8.351, z: -3.1732824}
+  m_LocalPosition: {x: 1.71, y: -8.35, z: -3.1732824}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3713,11 +3717,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4969917558038403174, guid: f498cc90969634c498461d48c536d89e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.7203369
+      value: 1.71
       objectReference: {fileID: 0}
     - target: {fileID: 4969917558038403174, guid: f498cc90969634c498461d48c536d89e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -8.281722
+      value: -8.35
       objectReference: {fileID: 0}
     - target: {fileID: 4969917558038403174, guid: f498cc90969634c498461d48c536d89e, type: 3}
       propertyPath: m_LocalPosition.z
