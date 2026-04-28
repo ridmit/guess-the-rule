@@ -39,6 +39,11 @@ public class RainbowDigitButton : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (PauseMenuController.IsPaused)
+        {
+            return;
+        }
+
         if (isFalling)
         {
             return;
@@ -49,6 +54,11 @@ public class RainbowDigitButton : MonoBehaviour
 
     public void NextValue()
     {
+        if (PauseMenuController.IsPaused)
+        {
+            return;
+        }
+
         if (isFalling)
         {
             return;

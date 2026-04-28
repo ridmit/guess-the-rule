@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LevelManager : MonoBehaviour
+public class LevelManager : MonoBehaviour, IPauseSensitive
 {
     public static LevelManager Instance { get; private set; }
 
@@ -62,6 +62,7 @@ public class LevelManager : MonoBehaviour
 
     public void RestartLevel()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

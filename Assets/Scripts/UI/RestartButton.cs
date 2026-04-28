@@ -2,14 +2,31 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
-public class RestartButton : MonoBehaviour
+public class RestartButton : MonoBehaviour, IPauseSensitive
 {
     private Button button;
 
     private void Awake()
     {
-        button = GetComponent<Button>();
-        button.onClick.AddListener(RestartLevel);
+        EnsureReferences();
+    }
+
+    private void OnEnable()
+    {
+        EnsureReferences();
+
+        if (button != null)
+        {
+            button.onClick.AddListener(RestartLevel);
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (button != null)
+        {
+            button.onClick.RemoveListener(RestartLevel);
+        }
     }
 
     private void OnDestroy()
@@ -29,5 +46,13 @@ public class RestartButton : MonoBehaviour
         }
 
         LevelManager.Instance.RestartLevel();
+    }
+
+    private void EnsureReferences()
+    {
+        if (button == null)
+        {
+            button = GetComponent<Button>();
+        }
     }
 }

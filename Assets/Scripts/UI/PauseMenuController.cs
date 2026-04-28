@@ -1,34 +1,34 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PauseMenuController : MonoBehaviour
 {
+    public static bool IsPaused { get; private set; }
+
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private Button pauseButton;
     [SerializeField] private Button continueButton;
     [SerializeField] private Button menuButton;
 
-    [Header("Gameplay Root")]
-    [SerializeField] private Transform gameplayRoot;
-
     [Header("Pause Visible Objects")]
     [SerializeField] private PauseVisibleObject[] pauseVisibleObjects;
 
-    private MonoBehaviour[] gameplayScripts;
+    private readonly List<MonoBehaviour> disabledByPause = new();
+
     private bool isPaused;
     private bool hasShownPauseVisibleObjects;
 
     private void Awake()
     {
+        IsPaused = false;
+        isPaused = false;
+        Time.timeScale = 1f;
+
         if (pauseMenu != null)
         {
             pauseMenu.SetActive(false);
-        }
-
-        if (gameplayRoot != null)
-        {
-            gameplayScripts = gameplayRoot.GetComponentsInChildren<MonoBehaviour>(true);
         }
 
         if (pauseButton != null)
@@ -47,7 +47,6 @@ public class PauseMenuController : MonoBehaviour
         }
 
         SetPauseVisibleObjectsVisible(false);
-        Time.timeScale = 1f;
     }
 
     private void Update()
@@ -82,7 +81,10 @@ public class PauseMenuController : MonoBehaviour
             menuButton.onClick.RemoveListener(GoToMenu);
         }
 
+        EnablePauseSensitiveScripts();
         SetPauseVisibleObjectsVisible(false);
+
+        IsPaused = false;
         Time.timeScale = 1f;
     }
 
@@ -93,7 +95,9 @@ public class PauseMenuController : MonoBehaviour
             return;
         }
 
+        IsPaused = true;
         isPaused = true;
+
         pauseMenu.SetActive(true);
 
         if (!hasShownPauseVisibleObjects)
@@ -102,7 +106,7 @@ public class PauseMenuController : MonoBehaviour
             hasShownPauseVisibleObjects = true;
         }
 
-        SetGameplayScriptsEnabled(false);
+        DisablePauseSensitiveScripts();
         Time.timeScale = 0f;
     }
 
@@ -113,31 +117,69 @@ public class PauseMenuController : MonoBehaviour
             return;
         }
 
+        IsPaused = false;
         isPaused = false;
+
         pauseMenu.SetActive(false);
         SetPauseVisibleObjectsVisible(false);
+
         Time.timeScale = 1f;
-        SetGameplayScriptsEnabled(true);
+        EnablePauseSensitiveScripts();
     }
 
-    private void SetGameplayScriptsEnabled(bool enabled)
+    private void DisablePauseSensitiveScripts()
     {
-        if (gameplayScripts == null)
-        {
-            return;
-        }
+        disabledByPause.Clear();
 
-        foreach (MonoBehaviour script in gameplayScripts)
+        MonoBehaviour[] scripts = FindObjectsOfType<MonoBehaviour>(true);
+
+        foreach (MonoBehaviour script in scripts)
+        {
+            if (script == null)
+            {
+                continue;
+            }
+
+            if (script is not IPauseSensitive)
+            {
+                continue;
+            }
+
+            if (!script.gameObject.activeInHierarchy)
+            {
+                continue;
+            }
+
+            if (!script.enabled)
+            {
+                continue;
+            }
+
+            disabledByPause.Add(script);
+            script.enabled = false;
+        }
+    }
+
+    private void EnablePauseSensitiveScripts()
+    {
+        foreach (MonoBehaviour script in disabledByPause)
         {
             if (script != null)
             {
-                script.enabled = enabled;
+                script.enabled = true;
             }
         }
+
+        disabledByPause.Clear();
     }
 
     private void SetPauseVisibleObjectsVisible(bool visible)
     {
+        if (pauseVisibleObjects == null)
+        {
+            return;
+        }
+
         foreach (PauseVisibleObject pauseVisibleObject in pauseVisibleObjects)
         {
             if (pauseVisibleObject != null)
@@ -149,7 +191,9 @@ public class PauseMenuController : MonoBehaviour
 
     private void GoToMenu()
     {
+        IsPaused = false;
         Time.timeScale = 1f;
+        EnablePauseSensitiveScripts();
         SceneManager.LoadScene("MainMenu");
     }
 }

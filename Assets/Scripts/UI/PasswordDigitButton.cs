@@ -17,15 +17,26 @@ public class PasswordDigitButton : MonoBehaviour
 
     private void Awake()
     {
-        button = GetComponent<Button>();
-
-        if (digitText == null)
-        {
-            digitText = GetComponentInChildren<TMP_Text>();
-        }
-
-        button.onClick.AddListener(IncrementDigit);
+        EnsureReferences();
         UpdateView();
+    }
+
+    private void OnEnable()
+    {
+        EnsureReferences();
+
+        if (button != null)
+        {
+            button.onClick.AddListener(IncrementDigit);
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (button != null)
+        {
+            button.onClick.RemoveListener(IncrementDigit);
+        }
     }
 
     private void OnDestroy()
@@ -45,6 +56,11 @@ public class PasswordDigitButton : MonoBehaviour
 
     private void IncrementDigit()
     {
+        if (PauseMenuController.IsPaused)
+        {
+            return;
+        }
+
         value = (value + 1) % 10;
 
         UpdateView();
@@ -56,6 +72,19 @@ public class PasswordDigitButton : MonoBehaviour
         if (digitText != null)
         {
             digitText.text = value.ToString();
+        }
+    }
+
+    private void EnsureReferences()
+    {
+        if (button == null)
+        {
+            button = GetComponent<Button>();
+        }
+
+        if (digitText == null)
+        {
+            digitText = GetComponentInChildren<TMP_Text>();
         }
     }
 }

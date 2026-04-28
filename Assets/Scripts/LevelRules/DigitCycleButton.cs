@@ -21,6 +21,11 @@ public class DigitCycleButton : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (PauseMenuController.IsPaused)
+        {
+            return;
+        }
+
         if (isLocked)
         {
             return;

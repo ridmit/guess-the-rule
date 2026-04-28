@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerMouseDrag : MonoBehaviour
+public class PlayerMouseDrag : MonoBehaviour, IPauseSensitive
 {
     [SerializeField] private MonoBehaviour playerMovementScript;
     [SerializeField] private Animator animator;
@@ -14,6 +14,7 @@ public class PlayerMouseDrag : MonoBehaviour
     private float defaultGravityScale;
     private Vector3 dragOffset;
     private bool isDragging;
+    private bool shouldRestoreMovementAfterPause;
 
     private readonly RaycastHit2D[] castResults = new RaycastHit2D[8];
 
@@ -32,6 +33,21 @@ public class PlayerMouseDrag : MonoBehaviour
         {
             defaultGravityScale = playerRigidbody.gravityScale;
             playerRigidbody.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        }
+    }
+
+    private void OnEnable()
+    {
+        if (!shouldRestoreMovementAfterPause)
+        {
+            return;
+        }
+
+        shouldRestoreMovementAfterPause = false;
+
+        if (playerMovementScript != null)
+        {
+            playerMovementScript.enabled = true;
         }
     }
 
@@ -138,7 +154,14 @@ public class PlayerMouseDrag : MonoBehaviour
 
         if (playerMovementScript != null)
         {
-            playerMovementScript.enabled = true;
+            if (PauseMenuController.IsPaused)
+            {
+                shouldRestoreMovementAfterPause = true;
+            }
+            else
+            {
+                playerMovementScript.enabled = true;
+            }
         }
 
         if (playerRigidbody != null)

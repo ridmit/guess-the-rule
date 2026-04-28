@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
-public class HintButton : MonoBehaviour
+public class HintButton : MonoBehaviour, IPauseSensitive
 {
     [SerializeField] private GameObject hintPanel;
     [SerializeField] private TMP_Text hintText;
@@ -13,12 +13,29 @@ public class HintButton : MonoBehaviour
 
     private void Awake()
     {
-        button = GetComponent<Button>();
-        button.onClick.AddListener(ToggleHint);
+        EnsureReferences();
 
         if (hintPanel != null)
         {
             hintPanel.SetActive(false);
+        }
+    }
+
+    private void OnEnable()
+    {
+        EnsureReferences();
+
+        if (button != null)
+        {
+            button.onClick.AddListener(ToggleHint);
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (button != null)
+        {
+            button.onClick.RemoveListener(ToggleHint);
         }
     }
 
@@ -56,5 +73,13 @@ public class HintButton : MonoBehaviour
         }
 
         hintText.text = LevelManager.Instance.GetHintText();
+    }
+
+    private void EnsureReferences()
+    {
+        if (button == null)
+        {
+            button = GetComponent<Button>();
+        }
     }
 }
