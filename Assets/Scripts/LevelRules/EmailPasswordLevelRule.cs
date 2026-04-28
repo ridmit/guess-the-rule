@@ -85,14 +85,14 @@ public class EmailPasswordLevelRule : MonoBehaviour
         int month = time.Month;
         int day = time.Day;
         int hour = time.Hour;
-        int fiveMinuteBlock = time.Minute / 5;
+        int tenMinuteBlock = time.Minute / 10;
 
         int rawValue =
             year * 13 +
             month * 17 +
             day * 19 +
             hour * 23 +
-            fiveMinuteBlock * 29;
+            tenMinuteBlock * 29;
 
         int code = rawValue % 100000;
 
