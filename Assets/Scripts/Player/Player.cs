@@ -6,6 +6,7 @@ public class Player : MonoBehaviour, IPauseSensitive
     public float jumpForce;
 
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private float groundCheckDistance = 0.1f;
 
     private Rigidbody2D body;
     private Animator animator;
@@ -31,15 +32,24 @@ public class Player : MonoBehaviour, IPauseSensitive
             transform.localScale = new Vector3(-1, 1, 1);
         }
 
-        body.linearVelocityX = horizontalInput * speed;
+        bool isGrounded = IsGrounded(out Rigidbody2D groundRigidbody);
 
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
+        float groundVelocityX = 0f;
+
+        if (isGrounded && groundRigidbody != null)
+        {
+            groundVelocityX = groundRigidbody.linearVelocity.x;
+        }
+
+        body.linearVelocityX = horizontalInput * speed + groundVelocityX;
+
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             Jump();
         }
 
-        animator.SetBool("run", horizontalInput != 0);
-        animator.SetBool("grounded", IsGrounded());
+        animator.SetBool("run", Mathf.Abs(horizontalInput) > 0.01f);
+        animator.SetBool("grounded", isGrounded);
     }
 
     private void Jump()
@@ -48,17 +58,25 @@ public class Player : MonoBehaviour, IPauseSensitive
         animator.SetTrigger("jump");
     }
 
-    private bool IsGrounded()
+    private bool IsGrounded(out Rigidbody2D groundRigidbody)
     {
         RaycastHit2D raycastHit = Physics2D.BoxCast(
             boxCollider.bounds.center,
             boxCollider.bounds.size,
             0,
             Vector2.down,
-            0.1f,
+            groundCheckDistance,
             groundLayer
         );
 
-        return raycastHit.collider != null;
+        groundRigidbody = null;
+
+        if (raycastHit.collider == null)
+        {
+            return false;
+        }
+
+        groundRigidbody = raycastHit.rigidbody;
+        return true;
     }
 }
