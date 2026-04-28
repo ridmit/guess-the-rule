@@ -12,8 +12,12 @@ public class PauseMenuController : MonoBehaviour
     [Header("Gameplay Root")]
     [SerializeField] private Transform gameplayRoot;
 
+    [Header("Pause Visible Objects")]
+    [SerializeField] private PauseVisibleObject[] pauseVisibleObjects;
+
     private MonoBehaviour[] gameplayScripts;
     private bool isPaused;
+    private bool hasShownPauseVisibleObjects;
 
     private void Awake()
     {
@@ -42,6 +46,7 @@ public class PauseMenuController : MonoBehaviour
             menuButton.onClick.AddListener(GoToMenu);
         }
 
+        SetPauseVisibleObjectsVisible(false);
         Time.timeScale = 1f;
     }
 
@@ -77,6 +82,7 @@ public class PauseMenuController : MonoBehaviour
             menuButton.onClick.RemoveListener(GoToMenu);
         }
 
+        SetPauseVisibleObjectsVisible(false);
         Time.timeScale = 1f;
     }
 
@@ -89,6 +95,13 @@ public class PauseMenuController : MonoBehaviour
 
         isPaused = true;
         pauseMenu.SetActive(true);
+
+        if (!hasShownPauseVisibleObjects)
+        {
+            SetPauseVisibleObjectsVisible(true);
+            hasShownPauseVisibleObjects = true;
+        }
+
         SetGameplayScriptsEnabled(false);
         Time.timeScale = 0f;
     }
@@ -102,6 +115,7 @@ public class PauseMenuController : MonoBehaviour
 
         isPaused = false;
         pauseMenu.SetActive(false);
+        SetPauseVisibleObjectsVisible(false);
         Time.timeScale = 1f;
         SetGameplayScriptsEnabled(true);
     }
@@ -118,6 +132,17 @@ public class PauseMenuController : MonoBehaviour
             if (script != null)
             {
                 script.enabled = enabled;
+            }
+        }
+    }
+
+    private void SetPauseVisibleObjectsVisible(bool visible)
+    {
+        foreach (PauseVisibleObject pauseVisibleObject in pauseVisibleObjects)
+        {
+            if (pauseVisibleObject != null)
+            {
+                pauseVisibleObject.SetVisible(visible);
             }
         }
     }
