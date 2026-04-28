@@ -102,7 +102,7 @@ public class LevelManager : MonoBehaviour, IPauseSensitive
 
     private int GetCurrentLevelNumber()
     {
-        const int firstLevelBuildIndex = 2;
+        const int firstLevelBuildIndex = 3;
         return SceneManager.GetActiveScene().buildIndex - firstLevelBuildIndex + 1;
     }
 

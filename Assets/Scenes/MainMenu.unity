@@ -939,6 +939,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playButton: {fileID: 2010191262}
+  settingsButton: {fileID: 1530841788}
   exitButton: {fileID: 2102510814}
 --- !u!4 &1767826466
 Transform:

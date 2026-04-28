@@ -151,7 +151,7 @@ MonoBehaviour:
   levelButtonsContainer: {fileID: 548566485}
   levelButtonPrefab: {fileID: 5206987196017994076, guid: 12167d61d9d5317438d1068c50f3b184, type: 3}
   backButton: {fileID: 900621093}
-  firstLevelBuildIndex: 2
+  firstLevelBuildIndex: 3
 --- !u!4 &220773113
 Transform:
   m_ObjectHideFlags: 0
