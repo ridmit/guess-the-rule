@@ -183,7 +183,6 @@ MonoBehaviour:
   secretSceneRoot: {fileID: 1482187988}
   playerPrefab: {fileID: 1745244387998166933, guid: 04be0884c94c7814e86830f181a62531, type: 3}
   spawnPoint: {fileID: 1482187989}
-  movePlayerToSpawnOnSceneStart: 1
 --- !u!1 &548566484
 GameObject:
   m_ObjectHideFlags: 0
@@ -633,6 +632,10 @@ PrefabInstance:
     - target: {fileID: 262861962392230861, guid: f522486c0bb1b0242804dd1c72584f4f, type: 3}
       propertyPath: m_Name
       value: SecretMenuMode
+      objectReference: {fileID: 0}
+    - target: {fileID: 1857260928677986064, guid: f522486c0bb1b0242804dd1c72584f4f, type: 3}
+      propertyPath: returnSceneName
+      value: LevelSelect
       objectReference: {fileID: 0}
     - target: {fileID: 3071682361922817679, guid: f522486c0bb1b0242804dd1c72584f4f, type: 3}
       propertyPath: m_LocalPosition.x
