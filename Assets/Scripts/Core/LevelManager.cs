@@ -10,6 +10,9 @@ public class LevelManager : MonoBehaviour, IPauseSensitive
     [SerializeField] private Transform startPoint;
     [SerializeField] private LevelHintsConfig levelHintsConfig;
     [SerializeField] private float nextLevelDelay = 0.15f;
+    [SerializeField] private string finalLevelSceneName = "Level10";
+    [SerializeField] private string mainMenuSceneName = "MainMenu";
+
 
     private bool isLevelFinished;
     private bool isRestarting;
@@ -114,19 +117,22 @@ public class LevelManager : MonoBehaviour, IPauseSensitive
         LoadNextLevel();
     }
 
-    private void LoadNextLevel()
+    public void LoadNextLevel()
     {
-        PauseQuestResetter.ResetIfCurrentSceneIsQuestScene();
+        Scene currentScene = SceneManager.GetActiveScene();
 
-        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-        int nextSceneIndex = currentSceneIndex + 1;
-
-        if (nextSceneIndex >= SceneManager.sceneCountInBuildSettings)
+        if (currentScene.name == finalLevelSceneName)
         {
-            Debug.Log("No next level in Build Settings.");
+            SecretMenuState.EnterSecretMenu();
+
+            PauseQuestResetter.ResetIfCurrentSceneIsQuestScene();
+
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(mainMenuSceneName);
             return;
         }
 
-        SceneManager.LoadScene(nextSceneIndex);
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(currentScene.buildIndex + 1);
     }
 }
