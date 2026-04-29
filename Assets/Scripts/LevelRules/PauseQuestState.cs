@@ -1,39 +1,45 @@
-using UnityEngine;
-
 public static class PauseQuestState
 {
-    private const string QuestStartedKey = "PauseQuestStarted";
-    private const string QuestCompletedKey = "PauseQuestCompleted";
-    private const string TaskKeyPrefix = "PauseQuestTask_";
+    private static bool isQuestStarted;
+    private static bool isQuestCompleted;
+    private static bool[] completedTasks;
 
-    public static bool IsQuestStarted => PlayerPrefs.GetInt(QuestStartedKey, 0) == 1;
+    public static bool IsQuestStarted => isQuestStarted;
 
-    public static bool IsQuestCompleted => PlayerPrefs.GetInt(QuestCompletedKey, 0) == 1;
+    public static bool IsQuestCompleted => isQuestCompleted;
 
-    public static bool IsQuestActive => IsQuestStarted && !IsQuestCompleted;
+    public static bool IsQuestActive => isQuestStarted && !isQuestCompleted;
 
     public static void StartQuestIfNeeded(int taskCount)
     {
-        if (IsQuestCompleted)
+        if (isQuestCompleted)
         {
             return;
         }
 
-        if (IsQuestStarted)
+        if (isQuestStarted)
         {
             return;
         }
 
-        ResetTasks(taskCount);
-
-        PlayerPrefs.SetInt(QuestStartedKey, 1);
-        PlayerPrefs.SetInt(QuestCompletedKey, 0);
-        PlayerPrefs.Save();
+        completedTasks = new bool[taskCount];
+        isQuestStarted = true;
+        isQuestCompleted = false;
     }
 
     public static bool IsTaskCompleted(int taskIndex)
     {
-        return PlayerPrefs.GetInt(GetTaskKey(taskIndex), 0) == 1;
+        if (completedTasks == null)
+        {
+            return false;
+        }
+
+        if (taskIndex < 0 || taskIndex >= completedTasks.Length)
+        {
+            return false;
+        }
+
+        return completedTasks[taskIndex];
     }
 
     public static void CompleteTask(int taskIndex, int taskCount)
@@ -43,27 +49,35 @@ public static class PauseQuestState
             return;
         }
 
-        if (IsTaskCompleted(taskIndex))
+        if (completedTasks == null || completedTasks.Length != taskCount)
+        {
+            completedTasks = new bool[taskCount];
+        }
+
+        if (taskIndex < 0 || taskIndex >= completedTasks.Length)
         {
             return;
         }
 
-        PlayerPrefs.SetInt(GetTaskKey(taskIndex), 1);
+        completedTasks[taskIndex] = true;
 
         if (AreAllTasksCompleted(taskCount))
         {
-            PlayerPrefs.SetInt(QuestStartedKey, 0);
-            PlayerPrefs.SetInt(QuestCompletedKey, 1);
+            isQuestStarted = false;
+            isQuestCompleted = true;
         }
-
-        PlayerPrefs.Save();
     }
 
     public static bool AreAllTasksCompleted(int taskCount)
     {
+        if (completedTasks == null || completedTasks.Length != taskCount)
+        {
+            return false;
+        }
+
         for (int i = 0; i < taskCount; i++)
         {
-            if (!IsTaskCompleted(i))
+            if (!completedTasks[i])
             {
                 return false;
             }
@@ -74,22 +88,8 @@ public static class PauseQuestState
 
     public static void ResetQuest(int taskCount)
     {
-        PlayerPrefs.DeleteKey(QuestStartedKey);
-        PlayerPrefs.DeleteKey(QuestCompletedKey);
-        ResetTasks(taskCount);
-        PlayerPrefs.Save();
-    }
-
-    private static void ResetTasks(int taskCount)
-    {
-        for (int i = 0; i < taskCount; i++)
-        {
-            PlayerPrefs.DeleteKey(GetTaskKey(i));
-        }
-    }
-
-    private static string GetTaskKey(int taskIndex)
-    {
-        return $"{TaskKeyPrefix}{taskIndex}";
+        completedTasks = new bool[taskCount];
+        isQuestStarted = false;
+        isQuestCompleted = false;
     }
 }

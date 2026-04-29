@@ -131,7 +131,10 @@ public class PauseMenuController : MonoBehaviour
     {
         disabledByPause.Clear();
 
-        MonoBehaviour[] scripts = FindObjectsOfType<MonoBehaviour>(true);
+        MonoBehaviour[] scripts = FindObjectsByType<MonoBehaviour>(
+            FindObjectsInactive.Include,
+            FindObjectsSortMode.None
+        );
 
         foreach (MonoBehaviour script in scripts)
         {
