@@ -3654,7 +3654,7 @@ Transform:
   m_GameObject: {fileID: 1051158748}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.82, y: -5.2, z: 0}
+  m_LocalPosition: {x: 2.54, y: -5.21, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3820,6 +3820,8 @@ MonoBehaviour:
   startPoint: {fileID: 2034481295}
   levelHintsConfig: {fileID: 0}
   nextLevelDelay: 0.05
+  finalLevelSceneName: Level10
+  mainMenuSceneName: MainMenu
 --- !u!4 &1133215995
 Transform:
   m_ObjectHideFlags: 0
