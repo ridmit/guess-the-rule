@@ -62,6 +62,8 @@ public class LevelManager : MonoBehaviour, IPauseSensitive
 
     public void RestartLevel()
     {
+        PauseQuestResetter.ResetIfCurrentSceneIsQuestScene();
+
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
@@ -114,6 +116,8 @@ public class LevelManager : MonoBehaviour, IPauseSensitive
 
     private void LoadNextLevel()
     {
+        PauseQuestResetter.ResetIfCurrentSceneIsQuestScene();
+
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         int nextSceneIndex = currentSceneIndex + 1;
 

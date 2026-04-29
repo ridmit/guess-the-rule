@@ -400,6 +400,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  groundCheckDistance: 0.1
 --- !u!95 &126912727
 Animator:
   serializedVersion: 7

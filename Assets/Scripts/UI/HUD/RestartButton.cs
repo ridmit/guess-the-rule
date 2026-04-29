@@ -44,7 +44,7 @@ public class RestartButton : MonoBehaviour, IPauseSensitive
             Debug.LogWarning("LevelManager not found.");
             return;
         }
-
+        PauseQuestResetter.ResetIfCurrentSceneIsQuestScene();
         LevelManager.Instance.RestartLevel();
     }
 
